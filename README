@@ -1,0 +1,21 @@
+Lexer - Creating a lexer for a simple programming language
+
+Metoda __init__ inițializează clasa Lexer cu un dicționar de configurații sub forma {TOKEN: REGEX}.
+Apoi creează un NFA pentru fiecare dintre REGEX-uri folosind metoda NFA.fromPrenex și le stochează într-o listă self.nfas.
+De asemenea, creează un dicționar self.dict_configuration_nfa care mapează fiecare NFA la TOKEN-ul corespunzător.
+În cele din urmă, creează un singur NFA combinând toate NFA-urile individuale folosind metoda construct_nfa și
+convertește acest NFA într-un DFA utilizând funcția convert_nfa_to_dfa.
+
+
+Metoda lex ia un cuvânt șir ca intrare si lexeaza în conformitate cu configurațiile furnizate. Acesta ține evidența stării curente în DFA,
+a token-ului curent care este procesat și a listei de ieșire a token-urilor.
+Iterează peste caracterele din cuvânt și, pentru fiecare caracter, actualizează starea curentă folosind metoda next din DFA.py
+și verifică dacă starea curentă este o stare finală sau o stare sink. Dacă starea curentă este o stare finală,
+actualizează indexul final al tokenului curent. Dacă starea curentă este o stare sink, resetează starea curentă
+start_of_new_token și verifică dacă simbolul curent este acceptat de oricare dintre NFA-urile originale. Dacă este, adaugă tokenul
+la lista de ouput. Dacă cuvântul este procesat complet și token-ul curent nu este gol,
+verifică din nou dacă token-ul curent este acceptat de oricare dintre NFA-urile originale și, dacă este, îl adaugă la lista de ieșire.
+Dacă DFA ajunge într-o stare sink și token-ul este gol, sau dacă cuvântul este procesat complet și token-ul curent
+nu este acceptat de niciunul dintre NFA-uri, returnează un mesaj de eroare care indică locația erorii.
+Dacă cuvântul este procesat complet și jetonul curent este acceptat de un NFA original sau dacă indexul final al token-ul curent este egal cu lungimea cuvântului,
+se iese din bucla.
